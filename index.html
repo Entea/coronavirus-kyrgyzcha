@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Коронавирус</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/DataTables-1.10.20/css/dataTables.bootstrap4.min.css"/>
+    <script src="/jquery-3.4.1.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/DataTables-1.10.20/js/jquery.dataTables.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            fetch('https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1')
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return Promise.reject(response);
+                    }
+                })
+                .then(function (data) {
+                    // todo: transform & render
+                    console.log(data);
+
+                    let tabularData = [];
+                    for (let i = 0; i < data.locations.length; i++) {
+                        const item = data.locations[i];
+                        const confirmed = item.timelines.confirmed;
+                        const recovered = item.timelines.recovered;
+                        const deaths = item.timelines.deaths;
+
+                        let extracted = {
+                            country: item.country_code,
+                            last_upd: item.last_updated,
+                            confirmed_today: confirmed.latest,
+                            confirmed_yesterday: 0, // TODO: calculate
+                            recovered_today: recovered.latest,
+                            recovered_yesterday: 0, // TODO: calculate
+                            dead_today: deaths.latest,
+                            dead_yesterday: 0, // TODO: calculate
+                        };
+                        tabularData.push([
+                            /*country: */ extracted.country,
+                            /*confirmed_total: */extracted.confirmed_today,
+                            /*confirmed_growth: */extracted.confirmed_today - extracted.confirmed_yesterday,
+                            /*recovered_total: */extracted.recovered_today,
+                            /*recovered_growth: */extracted.recovered_today - extracted.recovered_yesterday,
+                            /*dead_total: */extracted.dead_today,
+                            /*dead_growth: */extracted.dead_today - extracted.dead_yesterday,
+                        ]);
+                    }
+
+                    // see https://datatables.net/examples/data_sources/js_array.html
+                    $('#datatable').dataTable({
+                        paging: false,
+                        data: tabularData,
+                        columns: [
+                            {title: 'Country'},
+                            {title: 'Confirmed total'},
+                            {title: 'Confirmed growth'},
+                            {title: 'Recovered total'},
+                            {title: 'Recovered growth'},
+                            {title: 'Deaths total'},
+                            {title: 'Deaths growth'},
+                        ],
+                        order: [[ 2, "desc" ]]
+                    });
+                })
+                .catch(function (err) {
+                    console.error('Error', err);
+                });
+
+            return true;
+        });
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <table id="datatable">
+        <thead>
+        <th>Country</th>
+        <th>Total cases</th>
+        <th>New Cases</th>
+        <th>Total Deaths</th>
+        <th>New Deaths</th>
+        <th>Total Recovered</th>
+        <th>Active Cases</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
