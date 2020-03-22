@@ -1,5 +1,3 @@
-let str = '';
-
 document.addEventListener('DOMContentLoaded', (event) => {
     fetch('/backend/index.php')
         .then(function (response) {
@@ -14,56 +12,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             $('#overall_recovered').text(data.latest.recovered);
             $('#overall_deaths').text(data.latest.deaths);
 
-            let tabularData = [];
-            let countryMap = {};
-            let countries = new Set();
-            for (let i = 0; i < data.locations.length; i++) {
-                const item = data.locations[i];
-                const confirmed = item.timelines.confirmed;
-                const recovered = item.timelines.recovered;
-                const deaths = item.timelines.deaths;
-
-                let extracted = {
-                    country: item.country_code,
-                    province: item.province,
-                    last_upd: item.last_updated,
-                    confirmed_today: confirmed.latest,
-                    confirmed_yesterday: confirmed.prev_day,
-                    recovered_today: recovered.latest,
-                    recovered_yesterday: recovered.prev_day,
-                    dead_today: deaths.latest,
-                    dead_yesterday: deaths.prev_day,
-                };
-
-                // sum by country
-                if (countryMap[extracted.country]) {
-                    countryMap[extracted.country].confirmed_today += extracted.confirmed_today;
-                    countryMap[extracted.country].confirmed_yesterday += extracted.confirmed_yesterday;
-                    countryMap[extracted.country].recovered_today += extracted.recovered_today;
-                    countryMap[extracted.country].recovered_yesterday += extracted.recovered_yesterday;
-                    countryMap[extracted.country].dead_today += extracted.dead_today;
-                    countryMap[extracted.country].dead_yesterday += extracted.dead_yesterday;
-                } else {
-                    countryMap[extracted.country] = extracted;
-                }
-
-                countries.add(extracted.country);
+            let tabularData = data.table;
+            for (let i = 0; i < tabularData.length; i++) {
+                let item = tabularData[i];
+                item.country = translate(item.country);
             }
-
-            for (let name of countries) {
-                let extracted = countryMap[name];
-                tabularData.push([
-                    /*country: */ translate(extracted.country),
-                    /*confirmed_total: */extracted.confirmed_today,
-                    /*confirmed_growth: */extracted.confirmed_today - extracted.confirmed_yesterday,
-                    /*recovered_total: */extracted.recovered_today,
-                    /*recovered_growth: */extracted.recovered_today - extracted.recovered_yesterday,
-                    /*dead_total: */extracted.dead_today,
-                    /*dead_growth: */extracted.dead_today - extracted.dead_yesterday,
-                ]);
-            }
-
-            console.log('Translation needed: ', str);
 
             // see https://datatables.net/examples/data_sources/js_array.html
             let options = {
@@ -459,9 +412,5 @@ function translate(key) {
             return "Эритрея";
         case "UG":
             return "Уганда";
-
-        default:
-            str += `case "${key}":\n    return "${key}";\n`;
-            return key;
     }
 }

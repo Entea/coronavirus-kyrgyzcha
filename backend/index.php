@@ -14,7 +14,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 class CoronavirusTrackerApi
 {
     const API_URL = 'https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1';
-    const CACHE_KEY = 'coronavirus-tracker';
+    const CACHE_KEY = 'coronavirus-tracker-2';
     const CACHE_TIME = 3600;
     const CACHE_DIR = './cache';
 
@@ -59,7 +59,48 @@ class CoronavirusTrackerApi
 
         $json = $this->excludeDetailedTimeline($json);
 
-        return $json;
+        $locations = $json['locations'];
+        $rows = [];
+        foreach ($locations as $k => $v) {
+            $confirmed = $v['timelines']['confirmed'];
+            $recovered = $v['timelines']['confirmed'];
+            $deaths = $v['timelines']['confirmed'];
+
+            $row = [
+                'country' => $v['country_code'],
+                'confirmed_today' => $confirmed['latest'],
+                'confirmed_yesterday' => $confirmed['prev_day'],
+                'recovered_today' => $recovered['latest'],
+                'recovered_yesterday' => $recovered['prev_day'],
+                'dead_today' => $deaths['latest'],
+                'dead_yesterday' => $deaths['prev_day'],
+            ];
+
+            if ($rows[$row['country']]) {
+                $rows[$row['country']]['confirmed_today'] += $row['confirmed_today'];
+                $rows[$row['country']]['confirmed_yesterday'] += $row['confirmed_yesterday'];
+                $rows[$row['country']]['recovered_today'] += $row['recovered_today'];
+                $rows[$row['country']]['recovered_yesterday'] += $row['recovered_yesterday'];
+                $rows[$row['country']]['dead_today'] += $row['dead_today'];
+                $rows[$row['country']]['dead_yesterday'] += $row['dead_yesterday'];
+            } else {
+                $rows[$row['country']] = $row;
+            }
+        }
+
+        $flatRows = [];
+        foreach ($rows as $row) {
+            $flatRows[] = array_values($row);
+        }
+
+        return [
+            'table' => $flatRows,
+            'latest' => [
+                'confirmed' => $json['latest']['confirmed'],
+                'recovered' => $json['latest']['recovered'],
+                'deaths' => $json['latest']['deaths'],
+            ]
+        ];
     }
 
     /**
