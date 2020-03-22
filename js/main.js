@@ -79,7 +79,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     {title: 'Өлгөндөр, өсүшү'},
                 ],
                 order: [[1, "desc"]],
-                responsive: true,
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRowImmediate
+                    }
+                },
                 language: {
                     search: "Издөө"
                 }
