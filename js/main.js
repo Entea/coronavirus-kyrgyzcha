@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             let tabularData = data.table;
             for (let i = 0; i < tabularData.length; i++) {
                 let item = tabularData[i];
-                item.country = translate(item.country);
+                item[0] = translate(item[0]);
             }
 
             // see https://datatables.net/examples/data_sources/js_array.html
