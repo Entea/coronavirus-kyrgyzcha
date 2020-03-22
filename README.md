@@ -1,10 +1,8 @@
-# coronavirus-kyrgyzcha
-Кыргызча коронавирус статистика
+# Кыргызча коронавирус статистика
+http://virus.el.kg/ 
 
 # Goals
 * Provide COVID-19 world statistics in kyrgyz - do a copy-pasta of https://www.worldometers.info/coronavirus/#countries
-* ???
-* PROFIT
 
 # How to run
 ```
