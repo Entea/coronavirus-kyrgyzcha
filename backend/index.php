@@ -53,7 +53,7 @@ class CoronavirusTrackerApi
             throw new Exception('The response is empty');
         }
         $json = json_decode($content, true);
-        if (empty($content)) {
+        if (empty($json)) {
             throw new Exception('Can\'t be parsed');
         }
 
@@ -84,6 +84,15 @@ class CoronavirusTrackerApi
             // Remove detailed timeline for each type (confirmed, deaths, recovered)
             foreach ($location['timelines'] as $timelineKey => $timeline) {
                 unset($json['locations'][$locationKey]['timelines'][$timelineKey]['timeline']);
+
+                $timeSeries = $timeline['timeline'];
+                $prevDay = 0;
+                if (count($timeSeries) > 1) {
+                    array_pop($timeSeries);
+                    $prevDay = array_pop($timeSeries);
+                }
+
+                $json['locations'][$locationKey]['timelines'][$timelineKey]['prev_day'] = $prevDay;
             }
         }
         return $json;
@@ -94,6 +103,7 @@ class CoronavirusTrackerApi
 $api = new CoronavirusTrackerApi();
 
 try {
+    header('Content-type: application/json');
     echo json_encode($api->getDataCached());
 } catch (Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);
