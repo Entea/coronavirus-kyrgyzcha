@@ -8,6 +8,6 @@
 
 # How to run
 ```
-python3 -m http.server
-# or python -m http.server, if python3 is the default
+php -S localhost:8080
+# Open http://localhost:8080 in your browser
 ```
