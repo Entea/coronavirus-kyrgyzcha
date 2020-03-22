@@ -89,6 +89,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         display: $.fn.dataTable.Responsive.display.childRowImmediate
                     }
                 };
+
+                // reorder blocks on mobile browsers
+                const infoElement = document.querySelector('#info');
+                const worldstats = document.querySelector('#worldstats');
+
+                worldstats.parentElement.insertBefore(infoElement, worldstats)
             } else {
                 options.responsive = false;
             }
