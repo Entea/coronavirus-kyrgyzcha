@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     {title: 'Айыккандар'},
                     {title: 'Айыккандар, өсүшү', render: renderGood},
                     {title: 'Өлгөндөр'},
-                    {title: 'Өлгөндөр, өсүшү'},
+                    {title: 'Өлгөндөр, өсүшү', render: renderBad},
                 ],
                 order: [[1, "desc"]],
                 language: {
