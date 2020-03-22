@@ -6,91 +6,89 @@
     <title>Коронавирус</title>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/DataTables-1.10.20/css/dataTables.bootstrap4.min.css"/>
-    <script src="/jquery-3.4.1.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/DataTables-1.10.20/js/jquery.dataTables.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            fetch('https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1')
-                .then(function (response) {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        return Promise.reject(response);
-                    }
-                })
-                .then(function (data) {
-                    // todo: transform & render
-                    console.log(data);
-
-                    let tabularData = [];
-                    for (let i = 0; i < data.locations.length; i++) {
-                        const item = data.locations[i];
-                        const confirmed = item.timelines.confirmed;
-                        const recovered = item.timelines.recovered;
-                        const deaths = item.timelines.deaths;
-
-                        let extracted = {
-                            country: item.country_code,
-                            last_upd: item.last_updated,
-                            confirmed_today: confirmed.latest,
-                            confirmed_yesterday: 0, // TODO: calculate
-                            recovered_today: recovered.latest,
-                            recovered_yesterday: 0, // TODO: calculate
-                            dead_today: deaths.latest,
-                            dead_yesterday: 0, // TODO: calculate
-                        };
-                        tabularData.push([
-                            /*country: */ extracted.country,
-                            /*confirmed_total: */extracted.confirmed_today,
-                            /*confirmed_growth: */extracted.confirmed_today - extracted.confirmed_yesterday,
-                            /*recovered_total: */extracted.recovered_today,
-                            /*recovered_growth: */extracted.recovered_today - extracted.recovered_yesterday,
-                            /*dead_total: */extracted.dead_today,
-                            /*dead_growth: */extracted.dead_today - extracted.dead_yesterday,
-                        ]);
-                    }
-
-                    // see https://datatables.net/examples/data_sources/js_array.html
-                    $('#datatable').dataTable({
-                        paging: false,
-                        data: tabularData,
-                        columns: [
-                            {title: 'Өлкө'},
-                            {title: 'Ооругандар'},
-                            {title: 'Ооругандар, өсүшү'},
-                            {title: 'Айыккандар'},
-                            {title: 'Айыккандар, өсүшү'},
-                            {title: 'Өлгөндөр'},
-                            {title: 'Өлгөндөр, өсүшү'},
-                        ],
-                        order: [[ 2, "desc" ]]
-                    });
-                })
-                .catch(function (err) {
-                    console.error('Error', err);
-                });
-
-            return true;
-        });
-    </script>
+    <link rel="stylesheet" href="/css/main.css"/>
 </head>
 <body>
-<div class="container-fluid">
-    <table id="datatable">
-        <thead>
-        <th>Country</th>
-        <th>Total cases</th>
-        <th>New Cases</th>
-        <th>Total Deaths</th>
-        <th>New Deaths</th>
-        <th>Total Recovered</th>
-        <th>Active Cases</th>
-        </thead>
-        <tbody>
 
-        </tbody>
-    </table>
+<div class="jumbotron header-block">
+    <div class="container">
+        <h1 class="display-3">Коронавирус COVID–19</h1>
+        <p>Статистика подтвержденных случаев заболеваний COVID–19, выздоровлений и смертей по странам мира</p>
+    </div>
 </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Что это?</h3>
+            <p>Коронавирусы — это семейство вирусов, которые преимущественно поражают животных, но в некоторых случаях
+                могут передаваться человеку. Обычно заболевания, вызванные коронавирусами, протекают в легкой форме, не
+                вызывая тяжелой симптоматики.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Как передается?</h3>
+            <ul>
+                <li>воздушно-капельным путём (при кашле, чихании, разговоре)</li>
+                <li>воздушно-пылевым путём (с пылевыми частицами в воздухе)</li>
+                <li>контактно-бытовым путём (через рукопожатия, предметы обихода)</li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h3>Симптомы коронавируса</h3>
+            <ul>
+                <li>высокая температура тела</li>
+                <li>кашель (сухой или с небольшим количеством мокроты)</li>
+                <li>одышка</li>
+                <li>ощущения сдавленности в грудной клетке</li>
+            </ul>
+        </div>
+    </div>
+    <br />
+</div>
+
+<div class="jumbotron overall-block">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <h1 id="overall_confirmed">-</h1>
+                <p>Случаев заболевания</p>
+            </div>
+            <div class="col-md-4">
+                <h1 id="overall_recovered">-</h1>
+                <p>Человек выздоровело</p>
+            </div>
+            <div class="col-md-4">
+                <h1 id="overall_deaths">-</h1>
+                <p>Человек умерло</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="container-fluid">
+        <table id="datatable" class="table">
+            <thead>
+            <tr>
+                <th>Country</th>
+                <th>Total cases</th>
+                <th>New Cases</th>
+                <th>Total Deaths</th>
+                <th>New Deaths</th>
+                <th>Total Recovered</th>
+                <th>Active Cases</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="/jquery-3.4.1.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/DataTables-1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="/js/main.js"></script>
+
 </body>
 </html>
