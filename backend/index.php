@@ -63,8 +63,8 @@ class CoronavirusTrackerApi
         $rows = [];
         foreach ($locations as $k => $v) {
             $confirmed = $v['timelines']['confirmed'];
-            $recovered = $v['timelines']['confirmed'];
-            $deaths = $v['timelines']['confirmed'];
+            $recovered = $v['timelines']['recovered'];
+            $deaths = $v['timelines']['deaths'];
 
             $row = [
                 'country' => $v['country_code'],
