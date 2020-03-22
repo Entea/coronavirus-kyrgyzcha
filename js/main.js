@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             console.log('Translation needed: ', str);
 
             // see https://datatables.net/examples/data_sources/js_array.html
-            $('#datatable').dataTable({
+            let options = {
                 paging: false,
                 data: tabularData,
                 columns: [
@@ -79,15 +79,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     {title: 'Өлгөндөр, өсүшү'},
                 ],
                 order: [[1, "desc"]],
-                responsive: {
-                    details: {
-                        display: $.fn.dataTable.Responsive.display.childRowImmediate
-                    }
-                },
                 language: {
                     search: "Издөө"
                 }
-            });
+            };
+            if (isMobile()) {
+                options.responsive = {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRowImmediate
+                    }
+                };
+            } else {
+                options.responsive = false;
+            }
+            $('#datatable').dataTable(options);
         })
         .catch(function (err) {
             console.error('Error', err);
@@ -112,6 +117,15 @@ function renderGood(data, type, row) {
     return '0';
 }
 
+function isMobile() {
+    return !!(navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i));
+}
 
 function translate(key) {
     switch (key) {
