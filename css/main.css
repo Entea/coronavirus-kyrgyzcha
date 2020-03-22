@@ -10,3 +10,15 @@ body {
     background-color: #1b262c;
     color:#bbe1fa;
 }
+
+.bad {
+    color: red;
+}
+
+.good {
+    color: green;
+}
+
+div.dataTables_wrapper div.dataTables_filter {
+    text-align: left;
+}

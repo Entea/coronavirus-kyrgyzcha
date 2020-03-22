@@ -1,5 +1,7 @@
+let str = '';
+
 document.addEventListener('DOMContentLoaded', (event) => {
-    fetch('https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1')
+    fetch('/backend/index.php')
         .then(function (response) {
             if (response.ok) {
                 return response.json();
@@ -8,14 +10,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         })
         .then(function (data) {
-            // todo: transform & render
-            console.log(data);
-
             $('#overall_confirmed').text(data.latest.confirmed);
             $('#overall_recovered').text(data.latest.recovered);
             $('#overall_deaths').text(data.latest.deaths);
 
             let tabularData = [];
+            let countryMap = {};
+            let countries = new Set();
             for (let i = 0; i < data.locations.length; i++) {
                 const item = data.locations[i];
                 const confirmed = item.timelines.confirmed;
@@ -27,14 +28,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     province: item.province,
                     last_upd: item.last_updated,
                     confirmed_today: confirmed.latest,
-                    confirmed_yesterday: 0, // TODO: calculate
+                    confirmed_yesterday: confirmed.prev_day,
                     recovered_today: recovered.latest,
-                    recovered_yesterday: 0, // TODO: calculate
+                    recovered_yesterday: recovered.prev_day,
                     dead_today: deaths.latest,
-                    dead_yesterday: 0, // TODO: calculate
+                    dead_yesterday: deaths.prev_day,
                 };
+
+                // sum by country
+                if (countryMap[extracted.country]) {
+                    countryMap[extracted.country].confirmed_today += extracted.confirmed_today;
+                    countryMap[extracted.country].confirmed_yesterday += extracted.confirmed_yesterday;
+                    countryMap[extracted.country].recovered_today += extracted.recovered_today;
+                    countryMap[extracted.country].recovered_yesterday += extracted.recovered_yesterday;
+                    countryMap[extracted.country].dead_today += extracted.dead_today;
+                    countryMap[extracted.country].dead_yesterday += extracted.dead_yesterday;
+                } else {
+                    countryMap[extracted.country] = extracted;
+                }
+
+                countries.add(extracted.country);
+            }
+
+            for (let name of countries) {
+                let extracted = countryMap[name];
                 tabularData.push([
-                    /*country: */ `${extracted.country} ${extracted.province}`,
+                    /*country: */ translate(extracted.country),
                     /*confirmed_total: */extracted.confirmed_today,
                     /*confirmed_growth: */extracted.confirmed_today - extracted.confirmed_yesterday,
                     /*recovered_total: */extracted.recovered_today,
@@ -44,6 +63,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 ]);
             }
 
+            console.log('Translation needed: ', str);
+
             // see https://datatables.net/examples/data_sources/js_array.html
             $('#datatable').dataTable({
                 paging: false,
@@ -51,14 +72,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 columns: [
                     {title: 'Өлкө'},
                     {title: 'Ооругандар'},
-                    {title: 'Ооругандар, өсүшү'},
+                    {title: 'Ооругандар, өсүшү', render: renderBad},
                     {title: 'Айыккандар'},
-                    {title: 'Айыккандар, өсүшү'},
+                    {title: 'Айыккандар, өсүшү', render: renderGood},
                     {title: 'Өлгөндөр'},
                     {title: 'Өлгөндөр, өсүшү'},
                 ],
-                order: [[2, "desc"]],
-                responsive: true
+                order: [[1, "desc"]],
+                responsive: true,
+                language: {
+                    search: "Издөө"
+                }
             });
         })
         .catch(function (err) {
@@ -67,3 +91,235 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     return true;
 });
+
+function renderBad(data, type, row) {
+    if (data > 0) {
+        return '<span class="bad">+' + data + '</span>';
+    }
+
+    return '0';
+}
+
+function renderGood(data, type, row) {
+    if (data > 0) {
+        return '<span class="good">+' + data + '</span>';
+    }
+
+    return '0';
+}
+
+
+function translate(key) {
+    switch (key) {
+        case "CN":
+            return 'Кытай';
+        case "TH":
+            return "Тайланд";
+        case "JP":
+            return "Жапан";
+        case "SG":
+            return "Сингапур";
+        case "NP":
+            return "Непал";
+        case "MY":
+            return "Малайзия";
+        case "CA":
+            return "Канада";
+        case "AU":
+            return "Австралия";
+        case "LK":
+            return "Шри-Ланка";
+        case "DE":
+            return "Германия";
+        case "FI":
+            return "Финляндия";
+        case "AE":
+            return "Араб эмираттары";
+        case "PH":
+            return "Филиппин аралы";
+        case "IN":
+            return "Индия";
+        case "IT":
+            return "Италия";
+        case "SE":
+            return "Швеция";
+        case "ES":
+            return "Испания";
+        case "BE":
+            return "Белгия";
+        case "EG":
+            return "Египет";
+        case "HR":
+            return "Хорватия";
+        case "CH":
+            return "Чили";
+        case "BR":
+            return "Бразилия";
+        case "NO":
+            return "Норвегия";
+        case "RO":
+            return "Румыния";
+        case "BY":
+            return "Белорусия";
+        case "LT":
+            return "Латвия";
+        case "MX":
+            return "Мексика";
+        case "NZ":
+            return "Жаңы Зеландия";
+        case "NG":
+            return "Нигерия";
+        case "IE":
+            return "Ирландия";
+        case "LU":
+            return "Люксембург";
+        case "MC":
+            return "Монако";
+        case "QA":
+            return "Катар";
+        case "EC":
+            return "Эквадор";
+        case "AZ":
+            return "Азербайжан";
+        case "AM":
+            return "Армения";
+        case "DO":
+            return "Доминикан республикасы";
+        case "ID":
+            return "Индонезия";
+        case "PT":
+            return "Португалия";
+        case "AD":
+            return "Андорра";
+        case "LV":
+            return "Латвия";
+        case "MA":
+            return "Макао";
+        case "SA":
+            return "Сауд Арабия";
+        case "SN":
+            return "Сенегал";
+        case "AR":
+            return "Аргентина";
+        case "CL":
+            return "Чили";
+        case "JO":
+            return "Иордания";
+        case "UA":
+            return "Украина";
+        case "HU":
+            return "Венгрия";
+        case "LI":
+            return "Лихтенштейн";
+        case "PL":
+            return "Польша";
+        case "TN":
+            return "Тунис";
+        case "BA":
+            return "Босния жана Герцеговина";
+        case "SI":
+            return "Словения";
+        case "ZA":
+            return "Түштүк Африка";
+        case "BT":
+            return "Бутан";
+        case "CM":
+            return "Камерун";
+        case "CO":
+            return "Колумбия";
+        case "CR":
+            return "Коста-Рика";
+        case "PE":
+            return "Перу";
+        case "RS":
+            return "Сербия";
+        case "SK":
+            return "Словакия";
+        case "TG":
+            return "Того";
+        case "MT":
+            return "Мальта";
+        case "BG":
+            return "Болгария";
+        case "MV":
+            return "Мальдив аралы";
+        case "BD":
+            return "Баңгладеш";
+        case "PY":
+            return "Парагвай";
+        case "AL":
+            return "Албания";
+        case "CY":
+            return "Кипр";
+        case "BN":
+            return "Бруней";
+        case "US":
+            return "АКШ";
+        case "BF":
+            return "Буркина Фасо";
+        case "VA":
+            return "Ватикан";
+        case "MN":
+            return "Монголия";
+        case "PA":
+            return "Панама";
+        case "IR":
+            return "Иран";
+        case "KR":
+            return "Түштүк Корея";
+        case "FR":
+            return "Франция";
+        case "XX":
+            return "Белгисиз";
+        case "DK":
+            return "Дания";
+        case "CZ":
+            return "Чехия";
+        case "TW":
+            return "Тайван";
+        case "VN":
+            return "Вьетнам";
+        case "RU":
+            return "Орусия";
+        case "MD":
+            return "Молдова";
+        case "BO":
+            return "Боливия";
+        case "HN":
+            return "Гондурас";
+        case "GB":
+            return "Англия";
+        case "CD":
+            return "Конго";
+        case "JM":
+            return "Жамайка";
+        case "TR":
+            return "Түркия";
+        case "CU":
+            return "Куба";
+        case "GY":
+            return "Гаяна";
+        case "KZ":
+            return "Казакстан";
+        case "ET":
+            return "Эфиопия";
+        case "SD":
+            return "Судан";
+        case "GN":
+            return "Гвинея";
+        case "KE":
+            return "Кения";
+        case "AG":
+            return "Антигуа жана Барбуда";
+        case "UY":
+            return "Уругвай";
+        case "GH":
+            return "Гана";
+        case "NA":
+            return "Намибия";
+
+        default:
+            str += `case "${key}":\n    return "${key}";\n`;
+            return key;
+    }
+}
