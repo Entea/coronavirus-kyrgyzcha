@@ -317,6 +317,130 @@ function translate(key) {
             return "Гана";
         case "NA":
             return "Намибия";
+        case "KH":
+            return "Камбожа";
+        case "LB":
+            return "Ливан";
+        case "IQ":
+            return "Ирак";
+        case "OM":
+            return "Оман";
+        case "AF":
+            return "Ооганстан";
+        case "BH":
+            return "Бахрейн";
+        case "KW":
+            return "Кувейт";
+        case "DZ":
+            return "Алжир";
+        case "AT":
+            return "Австрия";
+        case "IL":
+            return "Израиль";
+        case "PK":
+            return "Пакистан";
+        case "GE":
+            return "Грузия";
+        case "GR":
+            return "Греция";
+        case "MK":
+            return "Македония";
+        case "EE":
+            return "Эстония";
+        case "SM":
+            return "Сан-Марино";
+        case "IS":
+            return "Исландия";
+        case "MQ":
+            return "MQ";
+        case "CI":
+            return "Кот-д'Ивуар";
+        case "SC":
+            return "Сейшел Аралдары";
+        case "TT":
+            return "Тринидад жана Тобаго";
+        case "VE":
+            return "Венесуэла";
+        case "SZ":
+            return "Эсватини падышачылыгы";
+        case "GA":
+            return "Габон";
+        case "GT":
+            return "Гватемала";
+        case "MR":
+            return "Мавритания";
+        case "RW":
+            return "Руанда";
+        case "LC":
+            return "Сент-Люсия";
+        case "VC":
+            return "Сент-Винсент жана Гренадиндер";
+        case "SR":
+            return "Суринам";
+        case "XK":
+            return "Косово";
+        case "CF":
+            return "Борбордук Африка Республикасы";
+        case "CG":
+            return "Конго Республикасы";
+        case "GQ":
+            return "Экватордук Гвинея";
+        case "UZ":
+            return "Өзбекстан";
+        case "NL":
+            return "Нидерланд";
+        case "BJ":
+            return "Бенин";
+        case "LR":
+            return "Либерия";
+        case "SO":
+            return "Сомали";
+        case "TZ":
+            return "Танзания";
+        case "BB":
+            return "Барбадос";
+        case "ME":
+            return "Черногория";
+        case "KG":
+            return "Кыргызстан";
+        case "MU":
+            return "Маврикий";
+        case "ZM":
+            return "Замбия";
+        case "DJ":
+            return "Жибути";
+        case "GM":
+            return "Гамбия";
+        case "BS":
+            return "Багама аралдары";
+        case "TD":
+            return "Чад";
+        case "SV":
+            return "Сальвадор";
+        case "FJ":
+            return "Фижи";
+        case "NI":
+            return "Никарагуа";
+        case "MG":
+            return "Мадагаскар";
+        case "HT":
+            return "Гаити";
+        case "AO":
+            return "Ангола";
+        case "CV":
+            return "Кабо-Верде";
+        case "NE":
+            return "Нигер";
+        case "PG":
+            return "Папуа-Жаңы Гвинея";
+        case "ZW":
+            return "Зимбабве";
+        case "TL":
+            return "Тимор Лешти";
+        case "ER":
+            return "Эритрея";
+        case "UG":
+            return "Уганда";
 
         default:
             str += `case "${key}":\n    return "${key}";\n`;
