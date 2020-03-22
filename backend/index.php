@@ -69,11 +69,11 @@ class CoronavirusTrackerApi
             $row = [
                 'country' => $v['country_code'],
                 'confirmed_today' => $confirmed['latest'],
-                'confirmed_yesterday' => $confirmed['prev_day'],
+                'confirmed_yesterday' => $confirmed['latest'] - $confirmed['prev_day'],
                 'recovered_today' => $recovered['latest'],
-                'recovered_yesterday' => $recovered['prev_day'],
+                'recovered_yesterday' => $recovered['latest'] - $recovered['prev_day'],
                 'dead_today' => $deaths['latest'],
-                'dead_yesterday' => $deaths['prev_day'],
+                'dead_yesterday' => $deaths['latest'] - $deaths['prev_day'],
             ];
 
             if ($rows[$row['country']]) {
