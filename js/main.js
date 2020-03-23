@@ -412,5 +412,7 @@ function translate(key) {
             return "Эритрея";
         case "UG":
             return "Уганда";
+        default:
+            return key;
     }
 }
