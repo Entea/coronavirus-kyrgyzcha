@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 columns: [
                     {title: 'Өлкө'},
                     {title: 'Ооругандар'},
-                    {title: 'Ооругандар, өсүшү', render: renderBad},
+                    {title: 'Ооругандар, 24 саат ичинде', render: renderBad},
                     {title: 'Айыккандар'},
-                    {title: 'Айыккандар, өсүшү', render: renderGood},
+                    {title: 'Айыккандар, 24 саат ичинде', render: renderGood},
                     {title: 'Өлгөндөр'},
-                    {title: 'Өлгөндөр, өсүшү', render: renderBad},
+                    {title: 'Өлгөндөр, 24 саат ичинде', render: renderBad},
                 ],
                 order: [[1, "desc"]],
                 language: {
