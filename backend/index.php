@@ -65,6 +65,7 @@ class CoronavirusTrackerApi
             $confirmed = $v['timelines']['confirmed'];
             $recovered = $v['timelines']['recovered'];
             $deaths = $v['timelines']['deaths'];
+            $active_cases = $confirmed['latest'] - $recovered['latest'] - $deaths['latest'];
 
             $row = [
                 'country' => $v['country_code'],
@@ -74,6 +75,8 @@ class CoronavirusTrackerApi
                 'recovered_yesterday' => $recovered['latest'] - $recovered['prev_day'],
                 'dead_today' => $deaths['latest'],
                 'dead_yesterday' => $deaths['latest'] - $deaths['prev_day'],
+                'active_cases' => $active_cases,
+                'active_cases_yesterday' => $active_cases - ($confirmed['prev_day'] - $recovered['prev_day'] - $deaths['prev_day']),
             ];
 
             if ($rows[$row['country']]) {
@@ -83,6 +86,8 @@ class CoronavirusTrackerApi
                 $rows[$row['country']]['recovered_yesterday'] += $row['recovered_yesterday'];
                 $rows[$row['country']]['dead_today'] += $row['dead_today'];
                 $rows[$row['country']]['dead_yesterday'] += $row['dead_yesterday'];
+                $rows[$row['country']]['active_cases'] += $row['active_cases'];
+                $rows[$row['country']]['active_cases_yesterday'] += $row['active_cases_yesterday'];
             } else {
                 $rows[$row['country']] = $row;
             }
