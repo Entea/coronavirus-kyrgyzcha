@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     { title: 'Өлгөндөр' },
                     { title: 'Өлгөндөр, 24 саат ичинде', render: renderBad },
                     { title: 'Азыркы учурда ооругандар' },
-                    { title: 'Учурда ооругандар, өзгөрүшү', render: renderDiff },
                 ],
                 order: [
                     [1, "desc"]
@@ -72,16 +71,6 @@ function renderGood(data, type, row) {
     }
 
     return '0';
-}
-
-function renderDiff(data, type, row) {
-    if (data > 0) {
-        return '<span class="bad">+' + data + '</span>';
-    } else if (data < 0) {
-        return '<span class="good">' + data + '</span>';
-    }
-
-    return '0'
 }
 
 function isMobile() {
