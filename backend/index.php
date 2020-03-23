@@ -74,6 +74,7 @@ class CoronavirusTrackerApi
                 'recovered_yesterday' => $recovered['latest'] - $recovered['prev_day'],
                 'dead_today' => $deaths['latest'],
                 'dead_yesterday' => $deaths['latest'] - $deaths['prev_day'],
+                'active_cases' => $confirmed['latest'] - $recovered['latest'] - $deaths['latest'],
             ];
 
             if ($rows[$row['country']]) {
@@ -83,6 +84,7 @@ class CoronavirusTrackerApi
                 $rows[$row['country']]['recovered_yesterday'] += $row['recovered_yesterday'];
                 $rows[$row['country']]['dead_today'] += $row['dead_today'];
                 $rows[$row['country']]['dead_yesterday'] += $row['dead_yesterday'];
+                $rows[$row['country']]['active_cases'] += $row['active_cases'];
             } else {
                 $rows[$row['country']] = $row;
             }

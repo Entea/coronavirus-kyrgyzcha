@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     fetch('/backend/index.php')
-        .then(function (response) {
+        .then(function(response) {
             if (response.ok) {
                 return response.json();
             } else {
                 return Promise.reject(response);
             }
         })
-        .then(function (data) {
+        .then(function(data) {
             $('#overall_confirmed').text(data.latest.confirmed);
             $('#overall_recovered').text(data.latest.recovered);
             $('#overall_deaths').text(data.latest.deaths);
@@ -23,15 +23,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 paging: false,
                 data: tabularData,
                 columns: [
-                    {title: 'Өлкө'},
-                    {title: 'Ооругандар'},
-                    {title: 'Ооругандар, 24 саат ичинде', render: renderBad},
-                    {title: 'Айыккандар'},
-                    {title: 'Айыккандар, 24 саат ичинде', render: renderGood},
-                    {title: 'Өлгөндөр'},
-                    {title: 'Өлгөндөр, 24 саат ичинде', render: renderBad},
+                    { title: 'Өлкө' },
+                    { title: 'Ооругандар' },
+                    { title: 'Ооругандар, 24 саат ичинде', render: renderBad },
+                    { title: 'Айыккандар' },
+                    { title: 'Айыккандар, 24 саат ичинде', render: renderGood },
+                    { title: 'Өлгөндөр' },
+                    { title: 'Өлгөндөр, 24 саат ичинде', render: renderBad },
+                    { title: 'Азыркы учурда ооругандар' },
                 ],
-                order: [[1, "desc"]],
+                order: [
+                    [1, "desc"]
+                ],
                 language: {
                     search: "Издөө"
                 }
@@ -47,7 +50,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
             $('#datatable').dataTable(options);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             console.error('Error', err);
         });
 
@@ -71,13 +74,13 @@ function renderGood(data, type, row) {
 }
 
 function isMobile() {
-    return !!(navigator.userAgent.match(/Android/i)
-        || navigator.userAgent.match(/webOS/i)
-        || navigator.userAgent.match(/iPhone/i)
-        || navigator.userAgent.match(/iPad/i)
-        || navigator.userAgent.match(/iPod/i)
-        || navigator.userAgent.match(/BlackBerry/i)
-        || navigator.userAgent.match(/Windows Phone/i));
+    return !!(navigator.userAgent.match(/Android/i) ||
+        navigator.userAgent.match(/webOS/i) ||
+        navigator.userAgent.match(/iPhone/i) ||
+        navigator.userAgent.match(/iPad/i) ||
+        navigator.userAgent.match(/iPod/i) ||
+        navigator.userAgent.match(/BlackBerry/i) ||
+        navigator.userAgent.match(/Windows Phone/i));
 }
 
 function translate(key) {
