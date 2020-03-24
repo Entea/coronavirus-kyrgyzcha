@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     { title: 'Өлкө' },
                     { title: 'Ооругандар' },
                     { title: 'Ооругандар, 24 саат ичинде', render: renderBad },
-                    { title: 'Айыккандар' },
-                    { title: 'Айыккандар, 24 саат ичинде', render: renderGood },
                     { title: 'Өлгөндөр' },
                     { title: 'Өлгөндөр, 24 саат ичинде', render: renderBad },
                     { title: 'Азыркы учурда ооругандар' },
