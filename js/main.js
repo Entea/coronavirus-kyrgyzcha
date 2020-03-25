@@ -106,6 +106,7 @@ function translate(key) {
         case "FI":
             return "Финляндия";
         case "AE":
+        case "UAE":
             return "Араб эмираттары";
         case "PH":
             return "Филиппин аралы";
@@ -226,6 +227,7 @@ function translate(key) {
         case "BN":
             return "Бруней";
         case "US":
+        case "USA":
             return "АКШ";
         case "BF":
             return "Буркина Фасо";
@@ -236,8 +238,10 @@ function translate(key) {
         case "PA":
             return "Панама";
         case "IR":
+        case "Iran":
             return "Иран";
         case "KR":
+        case "S. Korea":
             return "Түштүк Корея";
         case "FR":
             return "Франция";
@@ -246,6 +250,7 @@ function translate(key) {
         case "DK":
             return "Дания";
         case "CZ":
+        case "Czechia":
             return "Чехия";
         case "TW":
             return "Тайван";
@@ -257,9 +262,12 @@ function translate(key) {
             return "Молдова";
         case "BO":
             return "Боливия";
+        case "HK":
+            return "Гонконг";
         case "HN":
             return "Гондурас";
         case "GB":
+        case "UK":
             return "Англия";
         case "CD":
             return "Конго";

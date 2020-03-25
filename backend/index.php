@@ -13,8 +13,9 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class CoronavirusTrackerApi
 {
-    const API_URL = 'https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1';
-    const CACHE_KEY = 'coronavirus-tracker-2';
+    const API_URL = 'https://corona.lmao.ninja/countries';
+    const API_URL_ALL = 'https://corona.lmao.ninja/all';
+    const CACHE_KEY = 'coronavirus-tracker-3';
     const CACHE_TIME = 3600;
     const CACHE_DIR = './cache';
 
@@ -44,63 +45,45 @@ class CoronavirusTrackerApi
     {
         try {
             $response = $this->client->request('GET', self::API_URL);
+            $allResponse = $this->client->request('GET', self::API_URL_ALL);
         } catch (GuzzleException $e) {
             throw new Exception('Invalid response: ' . $e->getMessage());
         }
         $content = $response->getBody()->getContents();
+        $contentAll = $allResponse->getBody()->getContents();
 
-        if (empty($content)) {
+        if (empty($content) || empty($contentAll)) {
             throw new Exception('The response is empty');
         }
         $json = json_decode($content, true);
         if (empty($json)) {
             throw new Exception('Can\'t be parsed');
         }
-
-        $json = $this->excludeDetailedTimeline($json);
+        $jsonAll = json_decode($contentAll, true);
+        if (empty($jsonAll)) {
+            throw new Exception('All json can\'t be parsed');
+        }
 
         $locations = $json['locations'];
         $rows = [];
-        foreach ($locations as $k => $v) {
-            $confirmed = $v['timelines']['confirmed'];
-//            $recovered = $v['timelines']['recovered'];
-            $deaths = $v['timelines']['deaths'];
 
-            $row = [
-                'country' => $v['country_code'],
-                'confirmed_today' => $confirmed['latest'],
-                'confirmed_yesterday' => $confirmed['latest'] - $confirmed['prev_day'],
-//                'recovered_today' => $recovered['latest'],
-//                'recovered_yesterday' => $recovered['latest'] - $recovered['prev_day'],
-                'dead_today' => $deaths['latest'],
-                'dead_yesterday' => $deaths['latest'] - $deaths['prev_day'],
-                'active_cases' => $confirmed['latest'] - $recovered['latest'] - $deaths['latest'],
+        foreach ($json as $v) {
+            $rows [] = [
+                /*'country' => */$v['countryInfo']['iso2'] == 'NO DATA' ? $v['country'] : $v['countryInfo']['iso2'],
+                /*'confirmed' => */$v['cases'],
+                /*'confirmed_today' => */$v['todayCases'],
+                /*'deaths' => */$v['deaths'],
+                /*'deaths_today' => */$v['todayDeaths'],
+                /*'active_cases' => */$v['active'],
             ];
-
-            if ($rows[$row['country']]) {
-                $rows[$row['country']]['confirmed_today'] += $row['confirmed_today'];
-                $rows[$row['country']]['confirmed_yesterday'] += $row['confirmed_yesterday'];
-//                $rows[$row['country']]['recovered_today'] += $row['recovered_today'];
-//                $rows[$row['country']]['recovered_yesterday'] += $row['recovered_yesterday'];
-                $rows[$row['country']]['dead_today'] += $row['dead_today'];
-                $rows[$row['country']]['dead_yesterday'] += $row['dead_yesterday'];
-                $rows[$row['country']]['active_cases'] += $row['active_cases'];
-            } else {
-                $rows[$row['country']] = $row;
-            }
-        }
-
-        $flatRows = [];
-        foreach ($rows as $row) {
-            $flatRows[] = array_values($row);
         }
 
         return [
-            'table' => $flatRows,
+            'table' => $rows,
             'latest' => [
-                'confirmed' => $json['latest']['confirmed'],
-                'recovered' => $json['latest']['recovered'],
-                'deaths' => $json['latest']['deaths'],
+                'confirmed' => $jsonAll['cases'],
+                'recovered' => $jsonAll['recovered'],
+                'deaths' => $jsonAll['deaths'],
             ]
         ];
     }
