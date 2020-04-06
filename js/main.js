@@ -421,6 +421,86 @@ function translate(key) {
             return "Эритрея";
         case "UG":
             return "Уганда";
+        case "FK":
+            return "Фолкленд аралдары";
+        case "BI":
+            return "Бурунди";
+        case "VG":
+            return "Британиялык Виргин Аралдары";
+        case "AI":
+            return "Ангилья";
+        case "EH":
+            return "Батыш Сахара";
+        case "MW":
+            return "Малави";
+        case "TC":
+            return "Теркс жана Кайкос аралдары";
+        case "BZ":
+            return "Белиз";
+        case "SL":
+            return "Sierra Leone";
+        case "SL":
+            return "Sierra Leone";
+        case "BL":
+            return "Сен-Бартелеми";
+        case "BW":
+            return "Ботсвана";
+        case "KN":
+            return "Сент-Китс жана Невис";
+        case "MZ":
+            return "Мозамбик";
+        case "GL":
+            return "Гренландия";
+        case "CW":
+            return "Кюрасао";
+        case "LA":
+            return "Лаос";
+        case "GD":
+            return "Гренада";
+        case "DM":
+            return "Доминика";
+        case "NC":
+            return "Жаңы Каледония";
+        case "GW":
+            return "Гвинея-Бисау";
+        case "LY":
+            return "Ливия";
+        case "SY":
+            return "Сирия";
+        case "MM":
+            return "Мьянма";
+        case "MF":
+            return "Сен-Мартен";
+        case "BM":
+            return "Бермуд аралдары";
+        case "SX":
+            return "Синт-Ма́ртен";
+        case "KY":
+            return "Кайман аралдары";
+        case "KY":
+            return "Кайман аралдары";
+        case "PF":
+            return "Франция полинезиясы";
+        case "MO":
+            return "Макао";
+        case "ML":
+            return "Мали";
+        case "AW":
+            return "Аруба";
+        case "GI":
+            return "Гибралтар";
+        case "IM":
+            return "Мэн аралы";
+        case "YT":
+            return "Майотта аралы";
+        case "FO":
+            return "Фарер аралдары";
+        case "PS":
+            return "Палестина";
+        case "JE":
+            return "Жерси аралы";
+        case "RE":
+            return "Реюньон департаменти";
         default:
             return key;
     }
