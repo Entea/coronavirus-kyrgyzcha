@@ -13,8 +13,8 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class CoronavirusTrackerApi
 {
-    const API_URL = 'https://corona.lmao.ninja/countries';
-    const API_URL_ALL = 'https://corona.lmao.ninja/all';
+    const API_URL = 'https://corona.lmao.ninja/v2/countries';
+    const API_URL_ALL = 'https://corona.lmao.ninja/v2/all';
     const CACHE_KEY = 'coronavirus-tracker-3';
     const CACHE_TIME = 3600;
     const CACHE_DIR = './cache';
